@@ -36,7 +36,7 @@ let timerInterval = null;
 let editingShiftId = null;
 let settings = JSON.parse(localStorage.getItem('settings')) || {
     theme: 'light',
-    currency: 'RUB',
+    currency: 'UAH',
     conversionRates: {}
 };
 let notifications = [];
@@ -75,7 +75,7 @@ function init() {
     
     // Initialize currency selector with current value
     if (currencySelector) {
-        currencySelector.value = settings.currency || 'RUB';
+        currencySelector.value = settings.currency || 'UAH';
     }
     
     // Load exchange rates
@@ -200,11 +200,11 @@ function setupEventListeners() {
             saveSettings();
             updateSummary();
             updateStatistics();
-            showNotification("Валюта изменена", `Валюта изменена на ${getCurrencySymbol(settings.currency)}`);
+            showNotification("Валюта змінена", `Валюта змінена на ${getCurrencySymbol(settings.currency)}`);
         });
     }
     
-    // Обработчики для управления местами работы
+    // Обработчики для управління місцями роботи
     setupWorkplaceEventListeners();
     
     const useWorkplaceCheckbox = document.getElementById('useWorkplace');
@@ -383,7 +383,7 @@ function saveWorkplaces() {
 function updateWorkplaceDropdown() {
     const workplaceSelect = document.getElementById('shiftWorkplace');
     if (!workplaceSelect) return;
-    workplaceSelect.innerHTML = '<option value="">Глобальная ставка</option>';
+    workplaceSelect.innerHTML = '<option value="">Глобальна ставка</option>';
     let workplacesToShow = workplaces;
     // If no workplaces have been set in localStorage, use default entries
     if (!workplacesToShow || workplacesToShow.length === 0) {
@@ -395,7 +395,7 @@ function updateWorkplaceDropdown() {
     workplacesToShow.forEach(wp => {
         const option = document.createElement('option');
         option.value = wp.id;
-        option.textContent = `${wp.label} (${wp.rate} руб/ч)`;
+        option.textContent = `${wp.label} (${wp.rate} грн/год)`;
         workplaceSelect.appendChild(option);
     });
 }
@@ -404,7 +404,7 @@ function updateWorkplaceDropdown() {
 function updateGlobalWorkplaceDropdown() {
     const globalSelector = document.getElementById('globalWorkplaceSelector');
     if (!globalSelector) return;
-    globalSelector.innerHTML = '<option value="">Глобальная ставка</option>';
+    globalSelector.innerHTML = '<option value="">Глобальна ставка</option>';
     let workplacesToShow = workplaces;
     // Use default entries if no workplaces exist in localStorage
     if (!workplacesToShow || workplacesToShow.length === 0) {
@@ -416,7 +416,7 @@ function updateGlobalWorkplaceDropdown() {
     workplacesToShow.forEach(wp => {
         const option = document.createElement('option');
         option.value = wp.id;
-        option.textContent = `${wp.label} (${wp.rate} руб/ч)`;
+        option.textContent = `${wp.label} (${wp.rate} грн/год)`;
         globalSelector.appendChild(option);
     });
 }
@@ -471,8 +471,8 @@ function checkUpcomingShifts() {
         const startTime = new Date(nextShift.startTime).toLocaleTimeString('ru-RU');
         
         notifications.push({
-            title: "Предстоящая смена",
-            message: `У вас запланирована смена сегодня в ${startTime}`,
+            title: "Предстояща зміна",
+            message: `У вас запланована зміна сьогодні в ${startTime}`,
             timestamp: now
         });
     }
@@ -492,8 +492,8 @@ function setupAchievementsTab() {
     const achievementsTab = document.getElementById('achievements');
     
     achievementsTab.innerHTML = `
-        <h2>Ваши достижения</h2>
-        <p>Отслеживайте свой прогресс и разблокируйте достижения.</p>
+        <h2>Ваши досягнення</h2>
+        <p>Відслідковуйте свій прогрес і розблокуйте досягнення.</p>
         
         <div class="achievements-list">
             <!-- Achievements will be populated here -->
@@ -510,8 +510,8 @@ function updateAchievementsTab() {
     achievementsList.innerHTML = `
         <div class="achievement-card">
             <div class="achievement-icon">🏆</div>
-            <div class="achievement-title">Первая смена</div>
-            <div class="achievement-desc">Запишите свою первую рабочую смену</div>
+            <div class="achievement-title">Перша зміна</div>
+            <div class="achievement-desc">Запишіть свою першу робочу зміну</div>
             <div class="achievement-progress">
                 <div class="achievement-progress-bar" style="width: 0%"></div>
             </div>
@@ -523,8 +523,8 @@ function setupPerformanceTab() {
     const performanceTab = document.getElementById('performance');
     
     performanceTab.innerHTML = `
-        <h2>Анализ производительности</h2>
-        <p>Детальная статистика вашей работы за разные периоды.</p>
+        <h2>Аналіз продуктивності</h2>
+        <p>Детальна статистика вашої роботи за різні періоди.</p>
         
         <div class="performance-metrics">
             <!-- Performance metrics will be populated here -->
@@ -542,7 +542,6 @@ function updatePerformanceTab() {
     const performanceMetrics = document.querySelector('.performance-metrics');
     if (!performanceMetrics) return;
     
-    // Calculate performance metrics
     const now = new Date();
     
     // This week data
@@ -569,7 +568,6 @@ function updatePerformanceTab() {
     const lastWeekHours = lastWeekShifts.reduce((total, shift) => total + (shift.duration / 3600), 0);
     const lastWeekEarnings = lastWeekShifts.reduce((total, shift) => total + shift.earned, 0);
     
-    // Calculate changes
     const hoursChange = lastWeekHours > 0 ? ((thisWeekHours - lastWeekHours) / lastWeekHours) * 100 : 0;
     const earningsChange = lastWeekEarnings > 0 ? ((thisWeekEarnings - lastWeekEarnings) / lastWeekEarnings) * 100 : 0;
     
@@ -590,26 +588,25 @@ function updatePerformanceTab() {
         }
     }
     
-    // Populate metrics
     performanceMetrics.innerHTML = `
         <div class="performance-card">
-            <div class="performance-title">Часы на этой неделе</div>
+            <div class="performance-title">Години на цій неділі</div>
             <div class="performance-value">${thisWeekHours.toFixed(1)}</div>
             <div class="performance-change ${hoursChange >= 0 ? 'positive-change' : 'negative-change'}">
-                ${hoursChange.toFixed(1)}% ${hoursChange >= 0 ? '↑' : '↓'} от прошлой недели
+                ${hoursChange.toFixed(1)}% ${hoursChange >= 0 ? '↑' : '↓'} від попередньої недели
             </div>
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Заработок на этой неделе</div>
+            <div class="performance-title">Заробіток на цій неділі</div>
             <div class="performance-value">${formatMoney(thisWeekEarnings)}</div>
             <div class="performance-change ${earningsChange >= 0 ? 'positive-change' : 'negative-change'}">
-                ${earningsChange.toFixed(1)}% ${earningsChange >= 0 ? '↑' : '↓'} от прошлой недели
+                ${earningsChange.toFixed(1)}% ${earningsChange >= 0 ? '↑' : '↓'} від попередньої недели
             </div>
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Лучший день</div>
+            <div class="performance-title">Кращий день</div>
             <div class="performance-value">${bestDay}</div>
             <div class="performance-change positive-change">
                 ${formatMoney(bestDayEarnings)}
@@ -617,10 +614,10 @@ function updatePerformanceTab() {
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Средний заработок в час</div>
+            <div class="performance-title">Середній заробіток в годину</div>
             <div class="performance-value">${formatMoney(calculateAverageHourlyRate())}</div>
             <div class="performance-change">
-                За все время
+                За весь час
             </div>
         </div>
     `;
@@ -684,7 +681,7 @@ function createPerformanceChart() {
             labels: days,
             datasets: [
                 {
-                    label: 'Часы',
+                    label: 'Години',
                     data: hours,
                     borderColor: 'rgba(54, 162, 235, 1)',
                     backgroundColor: 'rgba(54, 162, 235, 0.1)',
@@ -693,7 +690,7 @@ function createPerformanceChart() {
                     tension: 0.1
                 },
                 {
-                    label: 'Заработок (₽)',
+                    label: 'Заробіток (₴)',
                     data: earnings,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -710,7 +707,7 @@ function createPerformanceChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Производительность за последние 30 дней'
+                    text: 'Продуктивність за останні 30 днів'
                 },
                 tooltip: {
                     mode: 'index',
@@ -722,7 +719,7 @@ function createPerformanceChart() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Часы'
+                        text: 'Години'
                     }
                 },
                 y1: {
@@ -730,7 +727,7 @@ function createPerformanceChart() {
                     position: 'right',
                     title: {
                         display: true,
-                        text: 'Заработок (₽)'
+                        text: 'Заробіток (₴)'
                     },
                     grid: {
                         drawOnChartArea: false
@@ -772,7 +769,7 @@ window.generateReport = generateReport;
 
 function generateReport(format) {
     if (shifts.length === 0) {
-        showNotification('Ошибка', 'Нет данных для создания отчета', 3000);
+        showNotification('Помилка', 'Немає даних для створення звіту', 3000);
         return;
     }
     
@@ -792,7 +789,7 @@ function generateReport(format) {
 }
 
 function generateCSV(hourlyRate) {
-    let csvContent = 'Дата,Начало,Окончание,Длительность (ч),Оплачиваемый обед,Налог (%),Заработано (₽)\n';
+    let csvContent = 'Дата,Початок,Закінчення,Тривалість (год),Оплачуваний обід,Податок (%),Зароблено (₴)\n';
     
     shifts.forEach(shift => {
         const startTime = new Date(shift.startTime).toLocaleTimeString('ru-RU');
@@ -807,14 +804,15 @@ function generateCSV(hourlyRate) {
     const totalDuration = shifts.reduce((sum, shift) => sum + shift.duration, 0) / 3600;
     const totalEarned = shifts.reduce((sum, shift) => sum + shift.earned, 0);
     
-    csvContent += `\nИтого,,,${totalDuration.toFixed(2)},,,"${formatMoney(totalEarned)}"\n`;
+    csvContent += `\nВсього,,,${totalDuration.toFixed(2)},,,"${formatMoney(totalEarned)}"\n`;
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `work-time-report-${new Date().toLocaleDateString('ru-RU')}.csv`);
+    link.setAttribute('download', `report-${new Date().toLocaleDateString('ru-RU')}.csv`);
     link.click();
+    URL.revokeObjectURL(url);
 }
 
 function printReport() {
@@ -823,7 +821,7 @@ function printReport() {
     let html = `
         <html>
         <head>
-            <title>Отчет по рабочему времени - ${new Date().toLocaleDateString('ru-RU')}</title>
+            <title>Звіт по робочому часу - ${new Date().toLocaleDateString('ru-RU')}</title>
             <style>
                 body { font-family: Arial, sans-serif; margin: 20px; }
                 h1 { text-align: center; margin-bottom: 20px; }
@@ -837,20 +835,20 @@ function printReport() {
             </style>
         </head>
         <body>
-            <button onclick="window.print()">Распечатать</button>
-            <h1>Отчет по рабочему времени</h1>
-            <p>Сформирован: ${new Date().toLocaleString('ru-RU')}</p>
+            <button onclick="window.print()">Друк</button>
+            <h1>Звіт по робочому часу</h1>
+            <p>Сформований: ${new Date().toLocaleString('ru-RU')}</p>
             
             <table>
                 <thead>
                     <tr>
                         <th>Дата</th>
-                        <th>Начало</th>
-                        <th>Окончание</th>
-                        <th>Длительность (ч)</th>
-                        <th>Оплачиваемый обед</th>
-                        <th>Налог (%)</th>
-                        <th>Заработано</th>
+                        <th>Початок</th>
+                        <th>Закінчення</th>
+                        <th>Тривалість (год)</th>
+                        <th>Оплачуваний обід</th>
+                        <th>Податок (%)</th>
+                        <th>Зароблено</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -884,8 +882,8 @@ function printReport() {
             </table>
             
             <div class="footer">
-                <p>Всего отработано: ${totalDuration.toFixed(2)} часов</p>
-                <p>Всего заработано: ${formatMoney(totalEarned)}</p>
+                <p>Всього відпрацьовано: ${totalDuration.toFixed(2)} годин</p>
+                <p>Всього зароблено: ${formatMoney(totalEarned)}</p>
             </div>
         </body>
         </html>
@@ -933,7 +931,7 @@ function openAddShiftModal() {
     const now = new Date();
     const today = now.toISOString().split('T')[0];
     
-    document.getElementById('shiftModalTitle').textContent = 'Добавить смену';
+    document.getElementById('shiftModalTitle').textContent = 'Додати зміну';
     document.getElementById('shiftDate').value = today;
     document.getElementById('shiftStart').value = '09:00';
     document.getElementById('shiftEnd').value = '18:00';
@@ -987,7 +985,7 @@ function openEditShiftModal(shiftId) {
     const startTime = formatTimeForInput(new Date(shift.startTime));
     const endTime = formatTimeForInput(new Date(shift.endTime));
     
-    document.getElementById('shiftModalTitle').textContent = 'Редактировать смену';
+    document.getElementById('shiftModalTitle').textContent = 'Редагувати зміну';
     document.getElementById('shiftDate').value = formattedDate;
     document.getElementById('shiftStart').value = startTime;
     document.getElementById('shiftEnd').value = endTime;
@@ -1126,7 +1124,7 @@ function saveShift() {
 }
 
 function deleteShift(shiftId) {
-    if (confirm('Вы уверены, что хотите удалить эту смену?')) {
+    if (confirm('Ви впевнені, що хочете видалити цю зміну?')) {
         shifts = shifts.filter(shift => shift.id !== shiftId);
         saveShifts();
         renderShiftsTable();
@@ -1148,7 +1146,7 @@ function updateCurrentShiftTime() {
     const minutes = Math.floor((elapsedSeconds % 3600) / 60);
     const seconds = elapsedSeconds % 60;
     
-    currentShiftTime.textContent = `Текущая смена: ${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+    currentShiftTime.textContent = `Поточна зміна: ${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
 }
 
 // Вспомогательные функции
@@ -1159,11 +1157,11 @@ function padZero(num) {
 function formatDuration(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours} ч ${minutes} мин`;
+    return `${hours} год ${minutes} хв`;
 }
 
 function formatMoney(amount) {
-    const currencyCode = settings.currency || 'RUB';
+    const currencyCode = settings.currency || 'UAH';
     // Ensure the amount is a valid number; if not, default to 0
     const numberAmount = (typeof amount === 'number' && !isNaN(amount)) ? amount : Number(amount) || 0;
     const convertedAmount = convertCurrency(numberAmount, 'RUB', currencyCode);
@@ -1207,14 +1205,14 @@ function createWeeklyChart() {
             labels: weeklyData.labels,
             datasets: [
                 {
-                    label: 'Часы работы',
+                    label: 'Години роботи',
                     data: weeklyData.hours,
                     backgroundColor: 'rgba(54, 162, 235, 0.6)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Заработок (₽)',
+                    label: 'Заробіток (₴)',
                     data: weeklyData.earnings,
                     backgroundColor: 'rgba(75, 192, 192, 0.6)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -1229,7 +1227,7 @@ function createWeeklyChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Статистика за последние 7 дней'
+                    text: 'Статистика за останні 7 днів'
                 }
             },
             scales: {
@@ -1237,7 +1235,7 @@ function createWeeklyChart() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Часы'
+                        text: 'Години'
                     }
                 },
                 y1: {
@@ -1245,7 +1243,7 @@ function createWeeklyChart() {
                     position: 'right',
                     title: {
                         display: true,
-                        text: 'Заработок (₽)'
+                        text: 'Заробіток (₴)'
                     },
                     grid: {
                         drawOnChartArea: false
@@ -1272,7 +1270,7 @@ function createMonthlyChart() {
             labels: monthlyData.labels,
             datasets: [
                 {
-                    label: 'Часы работы',
+                    label: 'Години роботи',
                     data: monthlyData.hours,
                     borderColor: 'rgba(54, 162, 235, 1)',
                     backgroundColor: 'rgba(54, 162, 235, 0.1)',
@@ -1281,7 +1279,7 @@ function createMonthlyChart() {
                     tension: 0.1
                 },
                 {
-                    label: 'Заработок (₽)',
+                    label: 'Заробіток (₴)',
                     data: monthlyData.earnings,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -1298,7 +1296,7 @@ function createMonthlyChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Статистика за текущий месяц'
+                    text: 'Статистика за поточний місяць'
                 }
             },
             scales: {
@@ -1306,7 +1304,7 @@ function createMonthlyChart() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Часы'
+                        text: 'Години'
                     }
                 },
                 y1: {
@@ -1314,7 +1312,7 @@ function createMonthlyChart() {
                     position: 'right',
                     title: {
                         display: true,
-                        text: 'Заработок (₽)'
+                        text: 'Заробіток (₴)'
                     },
                     grid: {
                         drawOnChartArea: false
@@ -1467,23 +1465,23 @@ function updatePerformanceMetrics() {
     
     performanceMetrics.innerHTML = `
         <div class="performance-card">
-            <div class="performance-title">Часы на этой неделе</div>
+            <div class="performance-title">Години на цій неділі</div>
             <div class="performance-value">${thisWeekHours.toFixed(1)}</div>
             <div class="performance-change ${hoursChange >= 0 ? 'positive-change' : 'negative-change'}">
-                ${hoursChange.toFixed(1)}% ${hoursChange >= 0 ? '↑' : '↓'} от прошлой недели
+                ${hoursChange.toFixed(1)}% ${hoursChange >= 0 ? '↑' : '↓'} від попередньої недели
             </div>
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Заработок на этой неделе</div>
+            <div class="performance-title">Заробіток на цій неділі</div>
             <div class="performance-value">${formatMoney(thisWeekEarnings)}</div>
             <div class="performance-change ${earningsChange >= 0 ? 'positive-change' : 'negative-change'}">
-                ${earningsChange.toFixed(1)}% ${earningsChange >= 0 ? '↑' : '↓'} от прошлой недели
+                ${earningsChange.toFixed(1)}% ${earningsChange >= 0 ? '↑' : '↓'} від попередньої недели
             </div>
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Лучший день</div>
+            <div class="performance-title">Кращий день</div>
             <div class="performance-value">${bestDay}</div>
             <div class="performance-change positive-change">
                 ${formatMoney(bestDayEarnings)}
@@ -1491,10 +1489,10 @@ function updatePerformanceMetrics() {
         </div>
         
         <div class="performance-card">
-            <div class="performance-title">Средний заработок в час</div>
+            <div class="performance-title">Середній заробіток в годину</div>
             <div class="performance-value">${formatMoney(calculateAverageHourlyRate())}</div>
             <div class="performance-change">
-                За все время
+                За весь час
             </div>
         </div>
     `;
@@ -1513,7 +1511,7 @@ function calculateEfficiency() {
 
 function updateProductivityTrends() {
     const dayStats = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
-    const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    const dayNames = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота'];
     
     shifts.forEach(shift => {
         const shiftDate = new Date(shift.startTime);
@@ -1536,9 +1534,9 @@ function updateProductivityTrends() {
     
     if (bestDayElement && productiveDayElement) {
         if (bestHours > 0) {
-            productiveDayElement.textContent = `${dayNames[bestDay]} (${bestHours.toFixed(1)} ч)`;
+            productiveDayElement.textContent = `${dayNames[bestDay]} (${bestHours.toFixed(1)} год)`;
         } else {
-            productiveDayElement.textContent = 'Недостаточно данных';
+            productiveDayElement.textContent = 'Недостатньо даних';
         }
         
         let bestEarningDate = '';
@@ -1558,7 +1556,7 @@ function updateProductivityTrends() {
         if (bestEarningDate) {
             bestDayElement.textContent = `${bestEarningDate} (${formatMoney(bestEarning)})`;
         } else {
-            bestDayElement.textContent = 'Недостаточно данных';
+            bestDayElement.textContent = 'Недостатньо даних';
         }
     }
 }
@@ -1574,8 +1572,8 @@ function renderCalendar() {
     
     if (!calendarDays || !monthYearHeader) return;
     
-    const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const months = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 
+                    'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
     
     monthYearHeader.textContent = `${months[calendarState.currentMonth]} ${calendarState.currentYear}`;
     
@@ -1634,7 +1632,7 @@ function renderCalendar() {
             });
             
             if (dayShifts.length > 2) {
-                dayContent += `<div class="day-shift-item">+${dayShifts.length - 2} еще</div>`;
+                dayContent += `<div class="day-shift-item">+${dayShifts.length - 2} ще</div>`;
             }
             
             dayContent += `</div>`;
@@ -1682,9 +1680,9 @@ function showCalendarDayDetails(day, month, year) {
     if (dayShifts.length === 0) {
         detailsContainer.innerHTML = `
             <h3>${dateString}</h3>
-            <p>Нет смен в этот день</p>
+            <p>Немає змін цього дня</p>
             <button class="primary-btn" onclick="openAddShiftForDate(${year}, ${month}, ${day})">
-                Добавить смену
+                Додати зміну
             </button>
         `;
         return;
@@ -1707,10 +1705,10 @@ function showCalendarDayDetails(day, month, year) {
         shiftsHTML += `
             <div class="calendar-shift-item">
                 <div class="calendar-shift-time">${startTime.toLocaleTimeString('ru-RU')} - ${endTime.toLocaleTimeString('ru-RU')} (${duration})</div>
-                ${wpLabel ? `<div class="calendar-shift-workplace">Место работы: ${wpLabel}</div>` : ''}
+                ${wpLabel ? `<div class="calendar-shift-workplace">Місце роботи: ${wpLabel}</div>` : ''}
                 <div class="calendar-shift-info">
-                    <span>Заработано: ${formattedEarned}</span>
-                    <span>Обед оплачиваемый: ${shift.paidLunch ? 'Да' : 'Нет'}</span>
+                    <span>Зароблено: ${formattedEarned}</span>
+                    <span>Оплачуваний обід: ${shift.paidLunch ? 'Так' : 'Ні'}</span>
                 </div>
                 <div class="mobile-shift-actions">
                     <button class="action-btn edit-btn" data-id="${shift.id}">✏️</button>
@@ -1723,14 +1721,14 @@ function showCalendarDayDetails(day, month, year) {
     detailsContainer.innerHTML = `
         <h3>${dateString}</h3>
         <div class="calendar-day-summary">
-            <div>Всего часов: ${totalHours.toFixed(1)}</div>
-            <div>Всего заработано: ${formatMoney(totalEarnings)}</div>
+            <div>Всього годин: ${totalHours.toFixed(1)}</div>
+            <div>Всього зароблено: ${formatMoney(totalEarnings)}</div>
         </div>
         <div class="calendar-shift-list">
             ${shiftsHTML}
         </div>
         <button class="primary-btn" onclick="openAddShiftForDate(${year}, ${month}, ${day})">
-            Добавить смену
+            Додати зміну
         </button>
     `;
     
@@ -1754,7 +1752,7 @@ window.openAddShiftForDate = function(year, month, day) {
     const dateObj = new Date(year, month, day);
     const formattedDate = dateObj.toISOString().split('T')[0];
     
-    document.getElementById('shiftModalTitle').textContent = 'Добавить смену';
+    document.getElementById('shiftModalTitle').textContent = 'Додати зміну';
     document.getElementById('shiftDate').value = formattedDate;
     document.getElementById('shiftStart').value = '09:00';
     document.getElementById('shiftEnd').value = '18:00';
@@ -1836,7 +1834,7 @@ function convertCurrency(amount, from = 'RUB', to = settings.currency) {
 
 function getCurrencySymbol(currencyCode) {
     const currencySymbols = {
-        'RUB': '₽',
+        'UAH': '₴',
         'USD': '$',
         'EUR': '€',
         'GBP': '£',
@@ -1874,7 +1872,7 @@ function startShift() {
     
     startShiftBtn.disabled = true;
     endShiftBtn.disabled = false;
-    currentStatus.textContent = 'Статус: Работаете';
+    currentStatus.textContent = 'Статус: Працюєте';
     currentShiftTime.classList.remove('hidden');
     
     timerInterval = setInterval(updateCurrentShiftTime, 1000);
@@ -1928,7 +1926,7 @@ function endShift() {
     
     startShiftBtn.disabled = false;
     endShiftBtn.disabled = true;
-    currentStatus.textContent = 'Статус: Не работаете';
+    currentStatus.textContent = 'Статус: Не працюєте';
     currentShiftTime.classList.add('hidden');
     
     localStorage.removeItem('currentShift');
@@ -2003,7 +2001,7 @@ function renderWorkplaceList() {
         const div = document.createElement('div');
         div.className = 'workplace-item';
         div.innerHTML = `
-            <span>${wp.label} (${wp.rate} руб/ч)</span>
+            <span>${wp.label} (${wp.rate} грн/год)</span>
             <div class="workplace-actions">
                 <button class="edit-workplace-btn" data-id="${wp.id}">✏️</button>
                 <button class="delete-workplace-btn" data-id="${wp.id}">🗑️</button>
@@ -2025,7 +2023,7 @@ function renderWorkplaceList() {
     document.querySelectorAll('.delete-workplace-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const id = btn.dataset.id;
-            if(confirm('Вы уверены, что хотите удалить это место работы?')) {
+            if(confirm('Ви впевнені, що хочете видалити це місце роботи?')) {
                 workplaces = workplaces.filter(w => String(w.id) !== String(id));
                 saveWorkplaces();
                 updateWorkplaceDropdown();
@@ -2064,11 +2062,11 @@ function confirmClearData() {
     dialog.className = 'confirmation-dialog';
     dialog.innerHTML = `
         <div class="confirmation-content">
-            <h3>Подтвердите действие</h3>
-            <p>Вы уверены, что хотите очистить таблицу?</p>
+            <h3>Підтвердіть дію</h3>
+            <p>Ви впевнені, що хочете очистити таблицю?</p>
             <div class="confirmation-buttons">
-                <button id="cancelClearData" class="close-btn">Отмена</button>
-                <button id="confirmClearData" class="secondary-btn">Да, очистить</button>
+                <button id="cancelClearData" class="close-btn">Скасувати</button>
+                <button id="confirmClearData" class="secondary-btn">Так, очистити</button>
             </div>
         </div>
     `;
@@ -2084,7 +2082,7 @@ function confirmClearData() {
         renderShiftsTable();
         updateSummary();
         document.body.removeChild(dialog);
-        showNotification('Таблица очищена', 'Данные удалены', 3000);
+        showNotification('Таблиця очищена', 'Дані видалені', 3000);
     });
 }
 
@@ -2133,7 +2131,7 @@ function restoreData() {
                     archivedTables = backup.archivedTables;
                     saveArchivedTables();
                 }
-                showNotification("Данные восстановлены", "Ваши данные успешно восстановлены.");
+                showNotification("Дані відновлені", "Ваши дані успішно відновлені.");
                 renderShiftsTable();
                 updateSummary();
                 setupCharts();
@@ -2142,7 +2140,7 @@ function restoreData() {
                 }
                 updateGlobalWorkplaceDropdown();
             } catch (error) {
-                alert("Ошибка восстановления данных: " + error.message);
+                alert("Помилка відновлення даних: " + error.message);
             }
         };
         reader.readAsText(file);
@@ -2171,17 +2169,17 @@ function saveCurrentTableToArchive() {
     const tableName = nameInput.value.trim();
     
     if (!tableName) {
-        showNotification('Ошибка', 'Пожалуйста, введите название для таблицы', 3000);
+        showNotification('Помилка', 'Будь ласка, введіть назву для таблиці', 3000);
         return;
     }
     
     if (shifts.length === 0) {
-        showNotification('Ошибка', 'Текущая таблица пуста', 3000);
+        showNotification('Помилка', 'Поточна таблиця пуста', 3000);
         return;
     }
     
     showConfirmation(
-        'Вы уверены, что хотите добавить текущую таблицу в архив? Данные будут удалены с главной страницы.',
+        'Ви впевнені, що хочете додати поточну таблицю в архів? Дані будуть видалені з головної сторінки.',
         function() {
             const archivedTable = {
                 id: Date.now().toString(),
@@ -2206,7 +2204,7 @@ function saveCurrentTableToArchive() {
             updateSummary();
             nameInput.value = '';
             renderArchiveList();
-            showNotification('Архив', 'Таблица успешно добавлена в архив', 3000);
+            showNotification('Архів', 'Таблиця успішно додана в архів', 3000);
         }
     );
 }
@@ -2220,7 +2218,7 @@ function renderArchiveList() {
     if (!archiveList) return;
     
     if (archivedTables.length === 0) {
-        archiveList.innerHTML = '<p>В архиве пока нет сохраненных таблиц</p>';
+        archiveList.innerHTML = '<p>В архіві поки немає збережених таблиць</p>';
         return;
     }
     
@@ -2243,18 +2241,18 @@ function renderArchiveList() {
         const totalShifts = table.statisticsData && table.statisticsData.totalShifts != null
                             ? table.statisticsData.totalShifts
                             : 0;
-        const tableName = table.name || "Без названия";
+        const tableName = table.name || "Без назви";
         
         const item = document.createElement('div');
         item.className = 'archive-item';
         item.innerHTML = `
             <div class="archive-item-info">
                 <div class="archive-item-title">${tableName}</div>
-                <div class="archive-item-date">Добавлено: ${formattedDate}</div>
-                <div class="archive-item-meta">${totalShifts} смен, ${totalHours} часов, ${totalEarnings}</div>
+                <div class="archive-item-date">Додано: ${formattedDate}</div>
+                <div class="archive-item-meta">${totalShifts} змін, ${totalHours} годин, ${totalEarnings}</div>
             </div>
             <div class="archive-item-actions">
-                <button class="action-btn" data-action="load" data-id="${table.id}">📂 Загрузить</button>
+                <button class="action-btn" data-action="load" data-id="${table.id}">📂 Завантажити</button>
                 <button class="action-btn delete-btn" data-action="delete" data-id="${table.id}">🗑️</button>
             </div>
         `;
@@ -2283,7 +2281,7 @@ function handleArchiveAction(e) {
 
 function loadTableFromArchive(table) {
     if (shifts.length > 0) {
-        showConfirmation('Загрузка таблицы из архива заменит текущие данные. Продолжить?', function(){
+        showConfirmation('Завантаження таблиці з архіву замінить поточні дані. Продовжити?', function(){
             performArchiveLoad(table);
         });
     } else {
@@ -2303,16 +2301,16 @@ function performArchiveLoad(table) {
     renderShiftsTable();
     updateSummary();
     setupCharts();
-    showNotification("Архив", `Таблица "${table.name}" успешно загружена`, 3000);
+    showNotification("Архів", `Таблиця "${table.name}" успішно завантажена`, 3000);
     closeArchiveModal();
 }
 
 function deleteTableFromArchive(tableId) {
-    showConfirmation('Вы уверены, что хотите удалить эту таблицу из архива?', function(){
+    showConfirmation('Ви впевнені, що хочете видалити цю таблицю з архіву?', function(){
         archivedTables = archivedTables.filter(t => t.id !== tableId);
         saveArchivedTables();
         renderArchiveList();
-        showNotification('Архив', 'Таблица удалена из архива', 3000);
+        showNotification('Архів', 'Таблиця видалена з архіву', 3000);
     });
 }
 
@@ -2370,11 +2368,11 @@ function showConfirmation(message, onConfirm, onCancel) {
     confirmationDialog.className = 'confirmation-dialog';
     confirmationDialog.innerHTML = `
         <div class="confirmation-content">
-            <h3>Подтвердите действие</h3>
+            <h3>Підтвердіть дію</h3>
             <p>${message}</p>
             <div class="confirmation-buttons">
-                <button class="secondary-btn" id="confirmYes">Да</button>
-                <button class="close-btn" id="confirmNo">Нет</button>
+                <button class="secondary-btn" id="confirmYes">Так</button>
+                <button class="close-btn" id="confirmNo">Ні</button>
             </div>
         </div>
     `;

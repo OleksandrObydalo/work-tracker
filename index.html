@@ -1,8 +1,8 @@
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учет рабочего времени</title>
+    <title>Облік робочого часу</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -11,32 +11,32 @@
     <div class="container">
         <div class="theme-switch-container">
             <div class="theme-switch-wrapper">
-                <span>Темная тема</span>
+                <span>Темна тема</span>
                 <label class="theme-switch">
                     <input type="checkbox" id="themeSwitch">
                     <span class="theme-slider"></span>
                 </label>
             </div>
             <select id="currencySelector" class="currency-selector">
-                <option value="RUB">Российский рубль (₽)</option>
-                <option value="USD">Доллар США ($)</option>
-                <option value="EUR">Евро (€)</option>
-                <option value="GBP">Фунт стерлингов (£)</option>
-                <option value="CNY">Китайский юань (¥)</option>
+                <option value="UAH">Українська гривня (₴)</option>
+                <option value="USD">Долар США ($)</option>
+                <option value="EUR">Євро (€)</option>
+                <option value="GBP">Фунт стерлінгів (£)</option>
+                <option value="CNY">Китайський юань (¥)</option>
             </select>
             <div class="tools-dropdown">
                 <button id="toolsBtn" class="tools-btn">⚙️</button>
                 <div id="toolsContent" class="tools-content">
-                    <button id="backupData">💾 Резервная копия данных</button>
-                    <button id="restoreData">📂 Восстановить данных</button>
-                    <button id="clearData">🗑️ Очистить таблицу</button>
-                    <button id="manageWorkplaces">🏢 Места работы</button>
-                    <button id="openArchive">🗃️ Архив</button>
+                    <button id="backupData">💾 Резервна копія даних</button>
+                    <button id="restoreData">📂 Відновити дані</button>
+                    <button id="clearData">🗑️ Очистити таблицю</button>
+                    <button id="manageWorkplaces">🏢 Місця роботи</button>
+                    <button id="openArchive">🗃️ Архів</button>
                     <div class="settings-group">
-                        <h3>Экспорт отчетов:</h3>
+                        <h3>Експорт звітів:</h3>
                         <div class="report-buttons">
                             <button onclick="generateReport('csv')" class="report-btn">CSV</button>
-                            <button onclick="generateReport('print')" class="report-btn">Печать</button>
+                            <button onclick="generateReport('print')" class="report-btn">Друк</button>
                             <button onclick="generateReport('pdf')" class="report-btn">PDF</button>
                         </div>
                     </div>
@@ -44,29 +44,29 @@
             </div>
         </div>
         
-        <h1>Учет рабочего времени</h1>
+        <h1>Облік робочого часу</h1>
         
         <div class="control-panel">
             <div class="rate-section">
-                <label for="hourlyRate">Ставка в час:</label>
+                <label for="hourlyRate">Ставка за годину:</label>
                 <input type="number" id="hourlyRate" min="0" step="10" value="200">
             </div>
             <div class="form-group">
-                <label for="lunchDurationInput">Длительность обеда</label>
+                <label for="lunchDurationInput">Тривалість обіду</label>
                 <select id="lunchDurationInput">
-                    <option value="30">30 минут</option>
-                    <option value="60" selected>1 час</option>
+                    <option value="30">30 хвилин</option>
+                    <option value="60" selected>1 година</option>
                 </select>
             </div>
             <div class="spoiler">
                 <div class="spoiler-header">
-                    <button type="button" class="spoiler-toggle primary-btn">Доп функции</button>
+                    <button type="button" class="spoiler-toggle primary-btn">Додаткові функції</button>
                 </div>
                 <div class="spoiler-content">
                     <div class="workplace-section">
                         <div class="checkbox-container">
                             <input type="checkbox" id="useGlobalWorkplace">
-                            <label for="useGlobalWorkplace">Указать место работы</label>
+                            <label for="useGlobalWorkplace">Вказати місце роботи</label>
                             <button id="openWorkplaceModalBtn" class="add-workplace-btn">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -75,55 +75,55 @@
                             </button>
                         </div>
                         <div id="globalWorkplaceContainer" style="display: none;">
-                            <label for="globalWorkplaceSelector">Выберите ставку:</label>
+                            <label for="globalWorkplaceSelector">Виберіть ставку:</label>
                             <select id="globalWorkplaceSelector">
-                                <option value="">Глобальная ставка</option>
-                                <option value="1741647898929">Мак (340 руб/ч)</option>
-                                <option value="1741647911510">Глобус (470 руб/ч)</option>
+                                <option value="">Глобальна ставка</option>
+                                <option value="1741647898929">Мак (340 грн/год)</option>
+                                <option value="1741647911510">Глобус (470 грн/год)</option>
                             </select>
                         </div>
                     </div>
                     <div class="tax-section">
                         <div class="checkbox-container">
                             <input type="checkbox" id="taxDeduction">
-                            <label for="taxDeduction">Вычет налога</label>
+                            <label for="taxDeduction">Вирахування податку</label>
                         </div>
                         <div class="tax-rate-container" id="taxRateContainer">
-                            <label for="taxRate">Ставка налога:</label>
+                            <label for="taxRate">Ставка податку:</label>
                             <input type="number" id="taxRate" min="0" max="100" step="1" value="13">
                             <div class="tax-presets">
-                                <button class="tax-preset-btn" data-rate="13">НДФЛ 13%</button>
-                                <button class="tax-preset-btn" data-rate="4">Самозанятый 4%</button>
-                                <button class="tax-preset-btn" data-rate="6">Самозанятый 6%</button>
+                                <button class="tax-preset-btn" data-rate="13">ПДФО 13%</button>
+                                <button class="tax-preset-btn" data-rate="4">Самозайнятий 4%</button>
+                                <button class="tax-preset-btn" data-rate="6">Самозайнятий 6%</button>
                             </div>
                         </div>
                     </div>
                     <div class="checkbox-container">
                         <input type="checkbox" id="paidLunch">
-                        <label for="paidLunch">Оплачиваемый обед</label>
+                        <label for="paidLunch">Оплачуваний обід</label>
                     </div>
                 </div>
             </div>
             <div class="buttons">
-                <button id="startShift" class="primary-btn">Начать смену</button>
-                <button id="endShift" class="secondary-btn" disabled>Завершить смену</button>
-                <button id="addShift" class="primary-btn">Добавить смену вручную</button>
+                <button id="startShift" class="primary-btn">Почати зміну</button>
+                <button id="endShift" class="secondary-btn" disabled>Завершити зміну</button>
+                <button id="addShift" class="primary-btn">Додати зміну вручну</button>
             </div>
 
             <div class="status">
-                <div id="currentStatus">Статус: Не работаете</div>
-                <div id="currentShiftTime" class="hidden">Текущая смена: 00:00:00</div>
+                <div id="currentStatus">Статус: Не працюєте</div>
+                <div id="currentShiftTime" class="hidden">Поточна зміна: 00:00:00</div>
             </div>
         </div>
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="table">
                 <span class="tab-emoji">📋</span>
-                <span class="tab-text">Таблица</span>
+                <span class="tab-text">Таблиця</span>
             </button>
             <button class="tab-btn" data-tab="charts">
                 <span class="tab-emoji">📊</span>
-                <span class="tab-text">Графики</span>
+                <span class="tab-text">Графіки</span>
             </button>
             <button class="tab-btn" data-tab="statistics">
                 <span class="tab-emoji">📈</span>
@@ -131,7 +131,7 @@
             </button>
             <button class="tab-btn" data-tab="calendar">
                 <span class="tab-emoji">📅</span>
-                <span class="tab-text">Календарь</span>
+                <span class="tab-text">Календар</span>
             </button>
         </div>
 
@@ -141,28 +141,28 @@
                     <thead>
                         <tr>
                             <th>Дата</th>
-                            <th>Место работы</th>
-                            <th>Ставка в час</th>
-                            <th>Начало</th>
-                            <th>Окончание</th>
-                            <th>Длительность</th>
-                            <th>Заработано</th>
-                            <th>Обед опл.</th>
-                            <th>Действия</th>
+                            <th>Місце роботи</th>
+                            <th>Ставка за годину</th>
+                            <th>Початок</th>
+                            <th>Закінчення</th>
+                            <th>Тривалість</th>
+                            <th>Зароблено</th>
+                            <th>Обід опл.</th>
+                            <th>Дії</th>
                         </tr>
                     </thead>
                     <tbody id="shiftsTableBody">
-                        <!-- Данные смен будут добавлены здесь -->
+                        <!-- Дані змін будуть додані тут -->
                     </tbody>
                 </table>
             </div>
             <div class="mobile-table-container" id="mobileShiftsContainer">
-                <!-- Мобильная версия таблицы будет добавлена здесь -->
+                <!-- Мобільна версія таблиці буде додана тут -->
             </div>
             <div id="mobilePagination"></div>
             <div class="table-summary">
-                <div>Всего отработано: <span id="totalTime">0 ч 0 мин</span></div>
-                <div>Заработано всего: <span id="totalEarned">0</span></div>
+                <div>Всього відпрацьовано: <span id="totalTime">0 год 0 хв</span></div>
+                <div>Зароблено всього: <span id="totalEarned">0</span></div>
             </div>
         </div>
 
@@ -179,39 +179,39 @@
             <div class="statistics-grid">
                 <div class="statistics-card">
                     <div class="statistics-value" id="statTotalShifts">0</div>
-                    <div class="statistics-label">Всего смен</div>
+                    <div class="statistics-label">Всього змін</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statTotalHours">0</div>
-                    <div class="statistics-label">Всего часов</div>
+                    <div class="statistics-label">Всього годин</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statTotalEarnings">0</div>
-                    <div class="statistics-label">Всего заработано</div>
+                    <div class="statistics-label">Всього зароблено</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statAvgHoursPerDay">0</div>
-                    <div class="statistics-label">Среднее часов в день</div>
+                    <div class="statistics-label">Середня кількість годин в день</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statAvgEarningsPerDay">0</div>
-                    <div class="statistics-label">Средний заработок в день</div>
+                    <div class="statistics-label">Середній заробіток в день</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statAvgEarningsPerHour">0</div>
-                    <div class="statistics-label">Средний заработок в час</div>
+                    <div class="statistics-label">Середній заробіток за годину</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statWeekHours">0</div>
-                    <div class="statistics-label">Часов за эту неделю</div>
+                    <div class="statistics-label">Годин за цей тиждень</div>
                 </div>
                 <div class="statistics-card">
                     <div class="statistics-value" id="statWeekEarnings">0</div>
-                    <div class="statistics-label">Заработано за неделю</div>
+                    <div class="statistics-label">Зароблено за тиждень</div>
                 </div>
             </div>
             
-            <h2 class="section-title">Анализ производительности</h2>
+            <h2 class="section-title">Аналіз продуктивності</h2>
             
             <div class="performance-metrics">
                 <!-- Performance metrics will be populated here -->
@@ -223,87 +223,87 @@
             
             <div class="performance-trends">
                 <div class="performance-trend-card" id="bestDay">
-                    <h3>Лучший день</h3>
+                    <h3>Найкращий день</h3>
                     <div id="bestDayValue">-</div>
                 </div>
                 <div class="performance-trend-card" id="worstDay">
-                    <h3>Продуктивный день недели</h3>
+                    <h3>Продуктивний день тижня</h3>
                     <div id="productiveDayValue">-</div>
                 </div>
             </div>
         </div>
 
         <div id="calendar" class="tab-content">
-            <h2>Календарь смен</h2>
-            <p>Просмотр ваших рабочих смен в календарном формате.</p>
+            <h2>Календар змін</h2>
+            <p>Перегляд ваших робочих змін у календарному форматі.</p>
             
             <div class="calendar-navigation">
                 <button id="prevMonth" class="secondary-btn">◀</button>
-                <h3 id="currentMonthYear">Месяц Год</h3>
+                <h3 id="currentMonthYear">Місяць Рік</h3>
                 <button id="nextMonth" class="secondary-btn">▶</button>
             </div>
             
             <div class="calendar-container">
                 <div class="calendar-weekdays">
-                    <div>Вс</div><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div>
+                    <div>Нд</div><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div>
                 </div>
                 <div id="calendarDays" class="calendar-days"></div>
             </div>
             
             <div id="calendarDetails" class="calendar-details">
-                <h3>Выберите дату для просмотра деталей</h3>
+                <h3>Виберіть дату для перегляду деталей</h3>
             </div>
         </div>
 
         <div id="shiftModal" class="modal">
             <div class="modal-content">
-                <h2 id="shiftModalTitle" class="modal-title">Добавить смену</h2>
+                <h2 id="shiftModalTitle" class="modal-title">Додати зміну</h2>
                 <form id="shiftForm">
                     <div class="form-group">
                         <label for="shiftDate">Дата</label>
                         <input type="date" id="shiftDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="shiftStart">Время начала</label>
+                        <label for="shiftStart">Час початку</label>
                         <input type="time" id="shiftStart" required>
                     </div>
                     <div class="form-group">
-                        <label for="shiftEnd">Время окончания</label>
+                        <label for="shiftEnd">Час закінчення</label>
                         <input type="time" id="shiftEnd" required>
                     </div>
                     <div class="checkbox-container form-group">
                         <input type="checkbox" id="useWorkplace">
-                        <label for="useWorkplace">Использовать место работы</label>
+                        <label for="useWorkplace">Використовувати місце роботи</label>
                     </div>
                     <div class="form-group" id="workplaceContainer" style="display: none;">
-                        <label for="shiftWorkplace">Место работы</label>
+                        <label for="shiftWorkplace">Місце роботи</label>
                         <select id="shiftWorkplace">
-                            <option value="">Глобальная ставка</option>
-                            <!-- Дополнительные опции заполнятся динамически -->
+                            <option value="">Глобальна ставка</option>
+                            <!-- Додаткові опції заповняться динамічно -->
                         </select>
                     </div>
                     <div class="checkbox-container form-group">
                         <input type="checkbox" id="shiftPaidLunch">
-                        <label for="shiftPaidLunch">Оплачиваемый обед</label>
+                        <label for="shiftPaidLunch">Оплачуваний обід</label>
                     </div>
                     <div class="form-group">
-                        <label for="shiftLunchDuration">Длительность обеда</label>
+                        <label for="shiftLunchDuration">Тривалість обіду</label>
                         <select id="shiftLunchDuration">
-                            <option value="30">30 минут</option>
-                            <option value="60" selected>1 час</option>
+                            <option value="30">30 хвилин</option>
+                            <option value="60" selected>1 година</option>
                         </select>
                     </div>
                     <div class="checkbox-container form-group">
                         <input type="checkbox" id="shiftTaxDeduction">
-                        <label for="shiftTaxDeduction">Вычет налога</label>
+                        <label for="shiftTaxDeduction">Вирахування податку</label>
                     </div>
                     <div class="form-group" id="shiftTaxRateContainer" style="display: none;">
-                        <label for="shiftTaxRate">Ставка налога (%)</label>
+                        <label for="shiftTaxRate">Ставка податку (%)</label>
                         <input type="number" id="shiftTaxRate" min="0" max="100" step="1" value="13">
                     </div>
                     <div class="modal-buttons">
-                        <button type="button" id="closeModal" class="close-btn">Отмена</button>
-                        <button type="submit" id="saveShift" class="primary-btn">Сохранить</button>
+                        <button type="button" id="closeModal" class="close-btn">Скасувати</button>
+                        <button type="submit" id="saveShift" class="primary-btn">Зберегти</button>
                     </div>
                 </form>
             </div>
@@ -311,58 +311,58 @@
 
         <div id="workplaceModal" class="modal">
             <div class="modal-content">
-                <h2 id="workplaceModalTitle" class="modal-title">Управление местами работы</h2>
+                <h2 id="workplaceModalTitle" class="modal-title">Управління місцями роботи</h2>
                 <form id="workplaceForm">
                     <input type="hidden" id="workplaceId">
                     <div class="form-group">
-                        <label for="workplaceName">Название места работы</label>
+                        <label for="workplaceName">Назва місця роботи</label>
                         <input type="text" id="workplaceName" required>
                     </div>
                     <div class="form-group">
-                        <label for="workplaceRate">Ставка в час</label>
+                        <label for="workplaceRate">Ставка за годину</label>
                         <input type="number" id="workplaceRate" min="0" step="10" required>
                     </div>
                     <div class="modal-buttons">
-                        <button type="button" id="closeWorkplaceModal" class="close-btn">Отмена</button>
-                        <button type="submit" id="saveWorkplace" class="primary-btn">Сохранить</button>
+                        <button type="button" id="closeWorkplaceModal" class="close-btn">Скасувати</button>
+                        <button type="submit" id="saveWorkplace" class="primary-btn">Зберегти</button>
                     </div>
                 </form>
-                <h3>Список мест работы</h3>
+                <h3>Список місць роботи</h3>
                 <div id="workplaceList"></div>
             </div>
         </div>
 
         <div id="archiveModal" class="modal">
             <div class="modal-content">
-                <h2 class="modal-title">Архив таблиц</h2>
+                <h2 class="modal-title">Архів таблиць</h2>
                 <div class="archive-controls">
                     <div class="form-group">
-                        <label for="archiveTableName">Название для текущей таблицы:</label>
-                        <input type="text" id="archiveTableName" placeholder="Например: Работа в мае 2023">
+                        <label for="archiveTableName">Назва для поточної таблиці:</label>
+                        <input type="text" id="archiveTableName" placeholder="Наприклад: Робота в травні 2023">
                     </div>
-                    <button id="saveToArchive" class="primary-btn">Добавить текущую таблицу в архив</button>
+                    <button id="saveToArchive" class="primary-btn">Додати поточну таблицю в архів</button>
                     <div class="search-sort-container">
                         <div class="form-group">
-                            <input type="text" id="archiveSearch" placeholder="Поиск по названию...">
+                            <input type="text" id="archiveSearch" placeholder="Пошук за назвою...">
                         </div>
                         <div class="form-group">
                             <select id="archiveSort">
-                                <option value="date-desc">Сначала новые</option>
-                                <option value="date-asc">Сначала старые</option>
-                                <option value="name-asc">По названию (А-Я)</option>
-                                <option value="name-desc">По названию (Я-А)</option>
+                                <option value="date-desc">Спочатку нові</option>
+                                <option value="date-asc">Спочатку старі</option>
+                                <option value="name-asc">За назвою (А-Я)</option>
+                                <option value="name-desc">За назвою (Я-А)</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="archive-list-container">
-                    <h3>Сохраненные таблицы</h3>
+                    <h3>Збережені таблиці</h3>
                     <div id="archiveList" class="archive-list">
                         <!-- Archived tables will appear here -->
                     </div>
                 </div>
                 <div class="modal-buttons">
-                    <button type="button" id="closeArchiveModal" class="close-btn">Закрыть</button>
+                    <button type="button" id="closeArchiveModal" class="close-btn">Закрити</button>
                 </div>
             </div>
         </div>
